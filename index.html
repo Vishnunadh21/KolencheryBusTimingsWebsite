@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BusNow — Live Bus Timings</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2a40;
+    --accent: #f5a623;
+    --accent2: #ff6b35;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --sub: #94a3b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === ANIMATED ROAD BACKGROUND === */
+  .road-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .road-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(245,166,35,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(59,130,246,0.06) 0%, transparent 70%);
+  }
+  .lane-lines {
+    position: absolute;
+    left: 50%;
+    top: -100px;
+    transform: translateX(-50%);
+    width: 4px;
+    height: calc(100% + 200px);
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(245,166,35,0.12) 0px,
+      rgba(245,166,35,0.12) 40px,
+      transparent 40px,
+      transparent 80px
+    );
+    animation: roadScroll 2s linear infinite;
+  }
+  @keyframes roadScroll {
+    from { transform: translateX(-50%) translateY(0); }
+    to   { transform: translateX(-50%) translateY(80px); }
+  }
+
+  /* === HEADER === */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 20px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .logo-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: -0.5px;
+  }
+  .logo-text span { color: var(--accent); }
+  .header-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.5px;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative;
+    z-index: 10;
+    padding: 28px 24px 20px;
+  }
+  .hero-stop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,166,35,0.08);
+    border: 1px solid rgba(245,166,35,0.2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    width: fit-content;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(32px, 8vw, 48px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero p {
+    color: var(--sub);
+    font-size: 15px;
+    font-weight: 400;
+    max-width: 320px;
+  }
+
+  /* === SEARCH SECTION === */
+  .search-section {
+    position: relative;
+    z-index: 10;
+    padding: 0 24px 24px;
+  }
+  .search-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .search-box {
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+  .search-box select,
+  .search-box input {
+    width: 100%;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 16px 16px 48px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .search-box select:focus,
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245,166,35,0.1);
+  }
+  .search-box select option { background: #1a2236; }
+  .arrow-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    font-size: 14px;
+  }
+  .time-filter {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .time-filter::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--sub);
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  /* === STATS BAR === */
+  .stats-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+    padding: 0 24px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .stats-bar::-webkit-scrollbar { display: none; }
+  .stat-chip {
+    flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* === DIVIDER === */
+  .section-head {
+    position: relative;
+    z-index: 10;
+    padding: 0 24px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .section-count {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* === BUS CARDS === */
+  .buses-list {
+    position: relative;
+    z-index: 10;
+    padding: 0 24px 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bus-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    animation: slideUp 0.4s ease both;
+  }
+  .bus-card:hover { 
+    transform: translateY(-2px);
+    border-color: rgba(245,166,35,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bus-emoji-wrap {
+    position: relative;
+    width: 64px;
+    height: 56px;
+    flex-shrink: 0;
+  }
+  .bus-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  }
+  .bus-svg {
+    width: 100%;
+    height: 100%;
+  }
+  .bus-info { flex: 1; min-width: 0; }
+  .bus-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .bus-name {
+    font-size: 13px;
+    color: var(--sub);
+    font-weight: 500;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bus-type-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    display: inline-block;
+  }
+  .badge-express { background: rgba(245,166,35,0.15); color: var(--accent); border: 1px solid rgba(245,166,35,0.3); }
+  .badge-ordinary { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.25); }
+  .badge-superfast { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+  .badge-minibus { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+
+  .next-time-box {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .next-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .next-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .next-countdown {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 3px;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .soon { background: rgba(239,68,68,0.15); color: #f87171; }
+  .medium { background: rgba(245,166,35,0.15); color: var(--accent); }
+  .later { background: rgba(34,197,94,0.12); color: var(--green); }
+
+  .card-route {
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 21px;
+  color: #ffffff;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+  .route-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-start { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+  .dot-end { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  .route-line {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(to right, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
+  }
+  .route-via {
+  font-size: 15px;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+  .route-arrow { font-size: 16px; flex-shrink: 0; }
+
+  .card-timings {
+    padding: 14px 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .timing-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.3px;
+    transition: all 0.15s;
+  }
+  .timing-pill.next-departure {
+    background: rgba(245,166,35,0.12);
+    border-color: rgba(245,166,35,0.4);
+    color: var(--accent);
+  }
+  .timing-pill.passed {
+    opacity: 0.4;
+    text-decoration: line-through;
+  }
+
+  .card-footer {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.02);
+  }
+  .platform-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .platform-num {
+    background: var(--blue);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
+  .track-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: var(--sub);
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .track-btn:hover {
+    background: rgba(245,166,35,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* === EMPTY STATE === */
+  .empty-state {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 24px;
+    display: none;
+  }
+  .empty-state.show { display: block; }
+  .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.4; }
+  .empty-state h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--sub);
+  }
+  .empty-state p { font-size: 14px; color: var(--muted); }
+
+  /* === CLOCK BAR === */
+  .clock-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .clock-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+  }
+  .clock-date {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .stop-name-bar {
+    text-align: right;
+  }
+  .stop-name-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stop-name-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  /* Bus SVG styles */
+  .bus-body { fill: none; }
+  
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    z-index: 999;
+    background: var(--green);
+    color: #000;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 30px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* No results */
+  .no-results {
+    display: none;
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 50px 24px;
+  }
+  .no-results.show { display: block; }
+
+  @media (max-width: 400px) {
+    header { padding: 16px 16px 0; }
+    .hero { padding: 20px 16px 16px; }
+    .search-section { padding: 0 16px 20px; }
+    .buses-list { padding: 0 16px 120px; }
+    .stats-bar { padding: 0 16px 16px; }
+    .section-head { padding: 0 16px 12px; }
+    .clock-bar { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="road-bg">
+  <div class="lane-lines"></div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">🚌 Tracking enabled!</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">🚌</div>
+    <div class="logo-text">Bus<span>Now</span></div>
+  </div>
+  <div class="header-badge">
+    <div class="live-dot"></div>
+    LIVE
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-stop">📍 &nbsp;Perumpavoor Bus Stand</div>
+  <h1>Find Your<br><em>Next Bus</em></h1>
+  <p>Select a destination to see all buses, timings & routes.</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-section">
+  <div class="search-label">Where are you going?</div>
+  <div class="search-box">
+    <span class="search-icon">🗺️</span>
+    <select id="destinationSelect" onchange="filterBuses()">
+      <option value="">— All Destinations —</option>
+      <option value="Karukappilly">Karukappilly</option>
+      <option value="Kothamangalam">Kothamangalam</option>
+      <option value="Muvattupuzha">Muvattupuzha</option>
+      <option value="Aluva">Aluva</option>
+      <option value="Thodupuzha">Thodupuzha</option>
+      <option value="Kochi">Kochi (Fort Kochi)</option>
+      <option value="Angamaly">Angamaly</option>
+      <option value="Thrissur">Thrissur</option>
+      <option value="Munnar">Munnar</option>
+    </select>
+    <span class="arrow-icon">▼</span>
+  </div>
+  <div class="time-filter">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All Today</button>
+    <button class="filter-btn" onclick="setFilter('morning',this)">Morning</button>
+    <button class="filter-btn" onclick="setFilter('afternoon',this)">Afternoon</button>
+    <button class="filter-btn" onclick="setFilter('evening',this)">Evening</button>
+    <button class="filter-btn" onclick="setFilter('night',this)">Night</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-chip">
+    <div class="stat-num" id="statTotal">12</div>
+    <div class="stat-lbl">Total Buses</div>
+  </div>
+  <div class="stat-chip">
+    <div class="stat-num" id="statNext">—</div>
+    <div class="stat-lbl">Next in (min)</div>
+  </div>
+  <div class="stat-chip">
+    <div class="stat-num" id="statRoutes">6</div>
+    <div class="stat-lbl">Routes</div>
+  </div>
+  <div class="stat-chip">
+    <div class="stat-num">5:00</div>
+    <div class="stat-lbl">First Bus</div>
+  </div>
+</div>
+
+<!-- SECTION HEADER -->
+<div class="section-head">
+  <div class="section-title">🕐 Departures</div>
+  <div class="section-count" id="busCount">12 buses</div>
+</div>
+
+<!-- BUS CARDS -->
+<div class="buses-list" id="busesList"></div>
+
+<!-- EMPTY STATE -->
+<div class="no-results" id="noResults">
+  <div style="font-size:60px;margin-bottom:16px;">🔍</div>
+  <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--sub);margin-bottom:8px;">No buses found</h3>
+  <p style="font-size:14px;color:var(--muted);">Try a different destination or time filter.</p>
+</div>
+
+<!-- FIXED CLOCK BAR -->
+<div class="clock-bar">
+  <div>
+    <div class="clock-time" id="clockTime">00:00</div>
+    <div class="clock-date" id="clockDate">Loading...</div>
+  </div>
+  <div class="stop-name-bar">
+    <div class="stop-name-lbl">Current Stop</div>
+    <div class="stop-name-val">Kolenchery</div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  BUS DATA
+// ============================================================
+const BUS_DATA = [
+  {
+    id: 1,
+    number: "KSRTC",
+    name: "Perumbavoor - Karukappilly",
+    type: "ordinary",
+    destination: "Karukappilly",
+    from: "Kolenchery",
+    via: "Kottor, Parekkattil Kavala",
+    platform: "Kolenchery College Bus Stop",
+    color: "#f5a623",
+    image: "ksrtckply.jpeg",
+    timings: ["08:40","13:10","15:40","18:00"]
+  },
+  {
+    id: 2,
+    number: "ALANKAR",
+    name: "Kaloor - Karukappilly",
+    type: "ordinary",
+    destination: "Karukappilly",
+    from: "Kolenchery",
+    via: "Kottor, Parekkattil Kavala",
+    platform: "Kolenchery College Bus Stop",
+    color: "#f5a623",
+    timings: ["18:50"]
+  },
+  {
+    id: 3,
+    number: "KSRTC",
+    name: "Ernakulam - Udumelpettai",
+    type: "fast-passenger",
+    destination: "Kothamangalam",
+    from: "Kolenchery",
+    via: "Muvattupuzha,Kothamangalam,Adimaly,Munnar,Marayoor",
+    platform: "Kolenchery College Bus Stop",
+    color: "#3b82f6",
+    timings: ["06:10"]
+  },
+  {
+    id: 4,
+    number: "KASTHOORI",
+    name: "Thalayolaparambu - Kothamangalam",
+    type: "ordinary",
+    destination: "Kothamangalam",
+    from: "Kolenchery",
+    via: "Pattimattom,Perumbavoor,Kothamangalam",
+    platform: "Kolenchery College Bus Stop ",
+    color: "#f5a623",
+    timings: ["06:45"]
+  },
+  {
+    id: 4,
+    number: "KSRTC",
+    name: "Kolenchery",
+    type: "Limited-stop",
+    destination: "Thammanimattom",
+    from: "Kolenchery",
+    via: "Kottor, Parekattil Kavala",
+    platform: "4",
+    color: "#3b82f6",
+    timings: ["07:25"]
+  },
+  {
+    id: 5,
+    number: "KL-05-E 520",
+    name: "Perumpavoor — Thodupuzha Super",
+    type: "superfast",
+    destination: "Thodupuzha",
+    from: "Perumpavoor",
+    via: "Kothamangalam",
+    platform: "5",
+    color: "#ef4444",
+    timings: ["06:30","08:30","10:30","12:30","14:30","16:30","18:30"]
+  },
+  {
+    id: 6,
+    number: "KL-40-F 630",
+    name: "Perumpavoor — Kochi City",
+    type: "express",
+    destination: "Kochi",
+    from: "Perumpavoor",
+    via: "Muvattupuzha, Tripunithura, MG Road",
+    platform: "3",
+    color: "#f5a623",
+    timings: ["05:15","06:45","08:15","09:45","11:15","12:45","14:15","15:45","17:15","18:45","20:15"]
+  },
+  {
+    id: 7,
+    number: "KL-07-G 711",
+    name: "Perumpavoor — Angamaly",
+    type: "ordinary",
+    destination: "Angamaly",
+    from: "Perumpavoor",
+    via: "Aluva",
+    platform: "6",
+    color: "#3b82f6",
+    timings: ["07:00","09:00","11:00","13:00","15:00","17:00","19:00"]
+  },
+  {
+    id: 8,
+    number: "KL-08-H 808",
+    name: "Perumpavoor — Thrissur Expressway",
+    type: "superfast",
+    destination: "Thrissur",
+    from: "Perumpavoor",
+    via: "Aluva, Angamaly",
+    platform: "7",
+    color: "#ef4444",
+    timings: ["06:00","09:00","12:00","15:00","18:00"]
+  },
+  {
+    id: 9,
+    number: "KL-05-I 950",
+    name: "Perumpavoor — Munnar Hill Queen",
+    type: "superfast",
+    destination: "Munnar",
+    from: "Perumpavoor",
+    via: "Kothamangalam, Adimali",
+    platform: "2",
+    color: "#ef4444",
+    timings: ["06:00","08:00","10:00","14:00","17:00"]
+  },
+  {
+    id: 10,
+    number: "KL-40-J 014",
+    name: "Perumpavoor City Mini",
+    type: "minibus",
+    destination: "Ernakulam",
+    from: "Perumpavoor",
+    via: "Piravom, Trippunithura",
+    platform: "8",
+    color: "#22c55e",
+    timings: ["06:30","08:00","10:00","12:00","14:00","16:00","18:00","20:00"]
+  },
+  {
+    id: 11,
+    number: "KL-40-K 121",
+    name: "Ernakulam — Kothamangalam Via",
+    type: "ordinary",
+    destination: "Kothamangalam",
+    from: "Perumpavoor",
+    via: "Kalloorkad, Keerampara",
+    platform: "1",
+    color: "#3b82f6",
+    timings: ["05:00","07:00","09:00","11:00","13:00","15:00","17:00","19:00","21:00"]
+  },
+  {
+    id: 12,
+    number: "KL-07-L 222",
+    name: "Perumpavoor — Muvattupuzha Local",
+    type: "ordinary",
+    destination: "Muvattupuzha",
+    from: "Perumpavoor",
+    via: "Ramamangalam",
+    platform: "2",
+    color: "#3b82f6",
+    timings: ["05:30","06:30","08:00","09:30","11:00","12:30","14:00","15:30","17:00","18:30","20:00","21:30"]
+  }
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let activeFilter = 'all';
+let activeDestination = '';
+
+// ============================================================
+//  UTILS
+// ============================================================
+function getNow() {
+  const n = new Date();
+  return n.getHours() * 60 + n.getMinutes();
+}
+
+function timeToMins(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function minsUntil(t) {
+  return timeToMins(t) - getNow();
+}
+
+function countdownLabel(mins) {
+  if (mins < 0) return null;
+  if (mins === 0) return 'Departing!';
+  if (mins < 60) return `${mins} min`;
+  return `${Math.floor(mins/60)}h ${mins%60}m`;
+}
+
+function filterByPeriod(timings) {
+  if (activeFilter === 'all') return timings;
+  return timings.filter(t => {
+    const h = parseInt(t.split(':')[0]);
+    if (activeFilter === 'morning') return h >= 5 && h < 12;
+    if (activeFilter === 'afternoon') return h >= 12 && h < 17;
+    if (activeFilter === 'evening') return h >= 17 && h < 21;
+    if (activeFilter === 'night') return h >= 21 || h < 5;
+  });
+}
+
+// ============================================================
+//  BUS SVG
+// ============================================================
+function busSVG(color) {
+  return `<svg class="bus-svg" viewBox="0 0 80 56" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body -->
+    <rect x="4" y="8" width="72" height="36" rx="6" fill="${color}" opacity="0.9"/>
+    <!-- Roof ridge -->
+    <rect x="10" y="6" width="60" height="6" rx="3" fill="${color}"/>
+    <!-- Front -->
+    <rect x="64" y="10" width="10" height="28" rx="3" fill="${color}"/>
+    <!-- Windows row -->
+    <rect x="10" y="12" width="12" height="10" rx="2" fill="rgba(180,230,255,0.7)"/>
+    <rect x="26" y="12" width="12" height="10" rx="2" fill="rgba(180,230,255,0.7)"/>
+    <rect x="42" y="12" width="12" height="10" rx="2" fill="rgba(180,230,255,0.7)"/>
+    <!-- Windshield -->
+    <rect x="57" y="12" width="10" height="14" rx="2" fill="rgba(180,230,255,0.85)"/>
+    <!-- Destination board -->
+    <rect x="10" y="25" width="44" height="9" rx="2" fill="rgba(0,0,0,0.35)"/>
+    <!-- Door -->
+    <rect x="16" y="26" width="8" height="18" rx="1" fill="rgba(0,0,0,0.2)"/>
+    <!-- Undercarriage -->
+    <rect x="6" y="42" width="68" height="5" rx="2" fill="rgba(0,0,0,0.3)"/>
+    <!-- Wheels -->
+    <circle cx="20" cy="50" r="6" fill="#1a1a2e" stroke="#555" stroke-width="1.5"/>
+    <circle cx="20" cy="50" r="3" fill="#333"/>
+    <circle cx="58" cy="50" r="6" fill="#1a1a2e" stroke="#555" stroke-width="1.5"/>
+    <circle cx="58" cy="50" r="3" fill="#333"/>
+    <!-- Headlight -->
+    <rect x="70" y="24" width="6" height="4" rx="1" fill="#fff9c4" opacity="0.9"/>
+    <!-- Side stripe -->
+    <rect x="4" y="36" width="72" height="3" rx="1" fill="rgba(255,255,255,0.12)"/>
+  </svg>`;
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function renderBuses() {
+  const list = document.getElementById('busesList');
+  const noRes = document.getElementById('noResults');
+  list.innerHTML = '';
+
+  const dest = activeDestination.toLowerCase();
+  let filtered = BUS_DATA.filter(b => {
+    if (dest && b.destination.toLowerCase() !== dest && !b.destination.toLowerCase().includes(dest)) return false;
+    return true;
+  });
+
+  // Sort by next departure
+  const now = getNow();
+  filtered.sort((a, b) => {
+    const na = a.timings.find(t => timeToMins(t) >= now) || a.timings[0];
+    const nb = b.timings.find(t => timeToMins(t) >= now) || b.timings[0];
+    return timeToMins(na) - timeToMins(nb);
+  });
+
+  // Time filter
+  const timeFiltered = filtered.map(b => ({
+    ...b,
+    timings: filterByPeriod(b.timings)
+  })).filter(b => b.timings.length > 0);
+
+  document.getElementById('busCount').textContent = `${timeFiltered.length} bus${timeFiltered.length !== 1 ? 'es' : ''}`;
+  document.getElementById('statTotal').textContent = timeFiltered.length;
+
+  // Update next bus stat
+  let soonest = Infinity;
+  timeFiltered.forEach(b => {
+    const next = b.timings.find(t => timeToMins(t) >= now);
+    if (next) {
+      const m = minsUntil(next);
+      if (m < soonest) soonest = m;
+    }
+  });
+  document.getElementById('statNext').textContent = soonest === Infinity ? '—' : soonest;
+
+  const uniqueRoutes = new Set(timeFiltered.map(b => b.destination));
+  document.getElementById('statRoutes').textContent = uniqueRoutes.size;
+
+  if (timeFiltered.length === 0) {
+    noRes.classList.add('show');
+    return;
+  }
+  noRes.classList.remove('show');
+
+  timeFiltered.forEach((bus, idx) => {
+    const nextTime = bus.timings.find(t => timeToMins(t) >= now) || bus.timings[bus.timings.length-1];
+    const mins = minsUntil(nextTime);
+    const countdown = mins >= 0 ? countdownLabel(mins) : 'Last bus passed';
+    const countdownClass = mins < 10 ? 'soon' : mins < 30 ? 'medium' : 'later';
+
+    const pillsHTML = bus.timings.slice(0, 10).map(t => {
+      const m = timeToMins(t);
+      const isPassed = m < now;
+      const isNext = t === nextTime;
+      return `<div class="timing-pill${isNext ? ' next-departure' : ''}${isPassed ? ' passed' : ''}">${t}</div>`;
+    }).join('') + (bus.timings.length > 10 ? `<div class="timing-pill" style="color:var(--muted)">+${bus.timings.length - 10}</div>` : '');
+
+    const badgeClass = {express:'badge-express',ordinary:'badge-ordinary',superfast:'badge-superfast',minibus:'badge-minibus'}[bus.type];
+    const badgeLabel = {express:'Express',ordinary:'Ordinary',superfast:'Super Fast',minibus:'Mini Bus'}[bus.type];
+
+    const card = document.createElement('div');
+    card.className = 'bus-card';
+    card.style.animationDelay = `${idx * 60}ms`;
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="bus-emoji-wrap">
+        ${
+          bus.image
+          ? `<img src="${bus.image}" class="bus-img" alt="${bus.name}">`
+          : busSVG(bus.color)
+          }
+        </div>
+        <div class="bus-info">
+          <div class="bus-number">${bus.number}</div>
+          <div class="bus-name">${bus.name}</div>
+          <span class="bus-type-badge ${badgeClass}">${badgeLabel}</span>
+        </div>
+        <div class="next-time-box">
+          <div class="next-label">Next Bus</div>
+          <div class="next-time" style="color:${bus.color}">${nextTime}</div>
+          <div class="next-countdown ${countdownClass}">${countdown}</div>
+        </div>
+      </div>
+      <div class="card-route">
+        <div class="route-dot dot-start"></div>
+        <span style="font-weight:600;color:var(--sub);white-space:nowrap">${bus.from}</span>
+        <div class="route-line"></div>
+        <div class="route-via">${bus.via}</div>
+        <div class="route-line"></div>
+        <span style="font-weight:600;color:var(--text);white-space:nowrap">${bus.destination}</span>
+        <div class="route-dot dot-end"></div>
+      </div>
+      <div class="card-timings">${pillsHTML}</div>
+      <div class="card-footer">
+        <div class="platform-info">
+          🚉 Platform <span class="platform-num">${bus.platform}</span>
+        </div>
+        <button class="track-btn" onclick="trackBus(${bus.id})">🛰 Track</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function filterBuses() {
+  activeDestination = document.getElementById('destinationSelect').value;
+  renderBuses();
+}
+
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBuses();
+}
+
+function trackBus(id) {
+  const bus = BUS_DATA.find(b => b.id === id);
+  const toast = document.getElementById('toast');
+  toast.textContent = `🛰 Tracking ${bus.number}`;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ============================================================
+//  CLOCK
+// ============================================================
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('clockTime').textContent = `${h}:${m}:${s}`;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('clockDate').textContent =
+    `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+// Re-render every minute so countdowns stay fresh
+setInterval(renderBuses, 60000);
+
+// INIT
+renderBuses();
+</script>
+</body>
+</html>
