@@ -358,7 +358,7 @@
   .bus-number {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 22px;
-    font-weight: 900;
+    font-weight: 600;
     letter-spacing: -0.5px;
     line-height: 1;
   }
@@ -420,10 +420,23 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 21px;
-  color: #ffffff;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
+}
+
+.route-via {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  color: #ffffff;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+
+  /* Desktop */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
   .route-dot {
     width: 8px; height: 8px;
@@ -437,14 +450,7 @@
     height: 1px;
     background: repeating-linear-gradient(to right, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
   }
-  .route-via {
-  font-size: 15px;
-  color: #ffffff;
-  text-align: center;
-  white-space: nowrap;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
+  
   .route-arrow { font-size: 16px; flex-shrink: 0; }
 
   .card-timings {
@@ -574,6 +580,24 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+
+  
+
+
+  .route-start,
+.route-end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.route-start-name,
+.route-end-name {
+    font-size: 24px; /* adjust here */
+    font-weight: 700;
+}
+
+
   .stop-name-val {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 18px;
@@ -615,15 +639,39 @@
   }
   .no-results.show { display: block; }
 
-  @media (max-width: 400px) {
-    header { padding: 16px 16px 0; }
-    .hero { padding: 20px 16px 16px; }
-    .search-section { padding: 0 16px 20px; }
-    .buses-list { padding: 0 16px 120px; }
-    .stats-bar { padding: 0 16px 16px; }
-    .section-head { padding: 0 16px 12px; }
-    .clock-bar { padding: 12px 16px; }
+  @media (max-width: 768px) {
+
+  .card-route {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
+
+  .route-line {
+    display: none;
+  }
+
+  .route-via {
+    width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .route-start,
+  .route-end {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+}
 </style>
 </head>
 <body>
@@ -1061,15 +1109,23 @@ function renderBuses() {
           <div class="next-countdown ${countdownClass}">${countdown}</div>
         </div>
       </div>
-      <div class="card-route">
-        <div class="route-dot dot-start"></div>
-        <span style="font-weight:600;color:var(--sub);white-space:nowrap">${bus.from}</span>
-        <div class="route-line"></div>
-        <div class="route-via">${bus.via}</div>
-        <div class="route-line"></div>
-        <span style="font-weight:600;color:var(--text);white-space:nowrap">${bus.destination}</span>
-        <div class="route-dot dot-end"></div>
-      </div>
+    <div class="card-route">
+<div class="route-start">
+    <div class="route-dot dot-start"></div>
+    <span class="route-start-name">${bus.from}</span>
+</div>
+
+<div class="route-via">${bus.via}</div>
+
+<div class="route-end">
+    <div class="route-dot dot-end"></div>
+    <span class="route-end-name">${bus.destination}</span>
+</div>
+</div>
+
+
+
+</div>
       <div class="card-timings">${pillsHTML}</div>
       <div class="card-footer">
         <div class="platform-info">
