@@ -802,6 +802,7 @@ const BUS_DATA = [
     from: "Kolenchery",
     via: "Kottor, Parekkattil Kavala",
     platform: "Kolenchery College Bus Stop",
+    image: "alankar.jpg",
     color: "#f5a623",
     timings: ["18:50"]
   },
@@ -809,24 +810,26 @@ const BUS_DATA = [
     id: 3,
     number: "KSRTC",
     name: "Ernakulam - Udumelpettai",
-    type: "fast-passenger",
+    type: "fastpassenger",
     destination: "Kothamangalam",
     from: "Kolenchery",
     via: "Muvattupuzha, Kothamangalam, Adimaly, Munnar, Marayoor, Udumelpettai",
     platform: "Kolenchery College Bus Stop",
     color: "#3b82f6",
+    image: "ksrtcmnr.jpg",
     timings: ["06:10"]
   },
   {
     id: 17,
     number: "KSRTC",
     name: "Ernakulam - Udumelpettai",
-    type: "fast-passenger",
+    type: "fastpassenger",
     destination: "Munnar",
     from: "Kolenchery",
     via: "Muvattupuzha, Kothamangalam, Adimaly, Munnar, Marayoor, Udumelpettai",
     platform: "Kolenchery College Bus Stop",
     color: "#3b82f6",
+    image: "ksrtcmnr.jpg",
     timings: ["06:10"]
   },
   {
@@ -839,17 +842,19 @@ const BUS_DATA = [
     via: "Pattimattom, Vengola, Perumbavoor, Kuruppumpady, Nellikkuzhi, Kothamangalam",
     platform: "Kolenchery College Bus Stop ",
     color: "#f5a623",
+    image: "kasthoori.jpg",
     timings: ["06:45"]
   },
   {
     id: 4,
     number: "KSRTC",
     name: "Kolenchery",
-    type: "Limited-stop",
+    type: "Limitedstop",
     destination: "Thammanimattom",
     from: "Kolenchery",
     via: "Kottor, Parekattil Kavala, Ramamangalam, Piravom, Peruva, Ettumanoor, Kottayam",
     platform: "4",
+    image: "ksrtcktm.jpg",
     color: "#3b82f6",
     timings: ["07:25"]
   },
@@ -857,36 +862,39 @@ const BUS_DATA = [
     id: 4,
     number: "KSRTC",
     name: "Kolenchery - Kottayam",
-    type: "Limited-stop",
+    type: "Limitedstop",
     destination: "Kottayam",
     from: "Kolenchery",
     via: "Parekattil Kavala, Thammanimattom, Ramamangalam, Piravom, Peruva, Ettumanoor, Kottayam",
     platform: "4",
     color: "#3b82f6",
+    image: "ksrtcktm.jpg",
     timings: ["07:25"]
   },
   {
     id: 14,
     number: "KSRTC",
     name: "Kolenchery - Thiruvananthapuram",
-    type: "Fast-Passenger",
+    type: "fastPassenger",
     destination: "Kottayam",
     from: "Kolenchery",
     via: "Peruvamuzhi, Ooramana, Ramamangalam, Piravom, Peruva, Kaduthuruthy, Ettumanoor, Kottayam, Chenganassery, Thiruvalla, Chengannoor, Panthalam, Adoor, Kottarakkara, Chadayamangalam, Kilimanoor, Venjaramoodu, Thiruvananthapuram",
     platform: "4",
     color: "#3b82f6",
+    image: "ksrtctvm.jpg",
     timings: ["06:30"]
   },
   {
     id: 16,
     number: "KSRTC",
     name: "Kolenchery - Thiruvananthapuram",
-    type: "Fast-Passenger",
+    type: "fastPassenger",
     destination: "Thiruvananthapuram",
     from: "Kolenchery",
     via: "Peruvamuzhi, Ooramana, Ramamangalam, Piravom, Peruva, Kaduthuruthy, Ettumanoor, Kottayam, Chenganassery, Thiruvalla, Chengannoor, Panthalam, Adoor, Kottarakkara, Chadayamangalam, Kilimanoor, Venjaramoodu, Thiruvananthapuram",
     platform: "4",
     color: "#3b82f6",
+    image: "ksrtctvm.jpg",
     timings: ["06:30"]
   },
   {
@@ -899,6 +907,7 @@ const BUS_DATA = [
     via: "Choondy, Ezhakkaranad ,Maneed ,Piravom ,Kaduthuruthy ,Ettumanoor,Kottayam",
     platform: "3",
     color: "#f5a623",
+    image: "goodwill.jpeg",
     timings: ["06:45","13:45"]
   },
   {
@@ -910,26 +919,54 @@ const BUS_DATA = [
     from: "Kolenchery",
     via: "Parekkatil Kavala, Thammanimattom, Ramamangalam, Mammalassery, Kakkad, Piravom",
     platform: "6",
+    image: "ksrtcthm.jpg",
     color: "#3b82f6",
     timings: ["07:00","09:00","11:00","13:00","15:00","17:00","19:00"]
   },
   {
     id: 8,
-    number: "KL-08-H 808",
-    name: "Perumpavoor — Thrissur Expressway",
-    type: "superfast",
-    destination: "Thrissur",
-    from: "Perumpavoor",
-    via: "Aluva, Angamaly",
-    platform: "7",
+    number: "THREE KINGS",
+    name: "Perumbavoor - Mulanthuruthy",
+    type: "ordinary",
+    destination: "Thiruvaniyoor",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara, Mulanthuruthy",
+    platform: "Kolenchery College Bus Stop",
     color: "#ef4444",
-    timings: ["06:00","09:00","12:00","15:00","18:00"]
+    image: "threekings.jpg",
+    timings: ["09:45","2:00"]
+  },
+  {
+    id: 18,
+    number: "ST.GEORGE",
+    name: "Perumbavoor - Chottanikkara",
+    type: "ordinary",
+    destination: "Thiruvaniyoor",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "st.george.jpg",
+    timings: ["07:40","3:45"]
+  },
+  {
+    id: 19,
+    number: "YATHRA",
+    name: "Mekkappala - Perumbavoor - Chottanikkara",
+    type: "ordinary",
+    destination: "Thiruvaniyoor",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "yathra.jpg",
+    timings: ["08:10","4:45"]
   },
   {
     id: 9,
-    number: "KL-05-I 950",
-    name: "Perumpavoor — Munnar Hill Queen",
-    type: "superfast",
+    number: "SMS",
+    name: "Kolenchery - Kaloor",
+    type: "ordinary",
     destination: "Munnar",
     from: "Perumpavoor",
     via: "Kothamangalam, Adimali",
@@ -1115,8 +1152,8 @@ function renderBuses() {
       return `<div class="timing-pill${isNext ? ' next-departure' : ''}${isPassed ? ' passed' : ''}">${t}</div>`;
     }).join('') + (bus.timings.length > 10 ? `<div class="timing-pill" style="color:var(--muted)">+${bus.timings.length - 10}</div>` : '');
 
-    const badgeClass = {express:'badge-express',ordinary:'badge-ordinary',superfast:'badge-superfast',minibus:'badge-minibus'}[bus.type];
-    const badgeLabel = {express:'Express',ordinary:'Ordinary',superfast:'Super Fast',minibus:'Mini Bus'}[bus.type];
+    const badgeClass = {express:'badge-express',ordinary:'badge-ordinary',Limitedstop:'badge-Limitedstop',fastpassenger:'badge-fastpassenger',superfast:'badge-superfast',minibus:'badge-minibus'}[bus.type];
+    const badgeLabel = {express:'Express',ordinary:'Ordinary',Limitedstop:'Limited Stop',fastpassenger:'Fast Passenger',superfast:'Super Fast',minibus:'Mini Bus'}[bus.type];
 
     const card = document.createElement('div');
     card.className = 'bus-card';
