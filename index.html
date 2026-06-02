@@ -688,7 +688,7 @@
 <header>
   <div class="logo">
     <div class="logo-icon">🚌</div>
-    <div class="logo-text">Bus<span>Now</span></div>
+    <div class="logo-text">Kolenchery Bus <span>Timings</span></div>
   </div>
   <div class="header-badge">
     <div class="live-dot"></div>
@@ -698,7 +698,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-stop">📍 &nbsp;Perumpavoor Bus Stand</div>
+  <div class="hero-stop">📍 &nbsp;Kolenchery</div>
   <h1>Find Your<br><em>Next Bus</em></h1>
   <p>Select a destination to see all buses, timings & routes.</p>
 </div>
@@ -712,10 +712,10 @@
       <option value="">— All Destinations —</option>
       <option value="Karukappilly">Karukappilly</option>
       <option value="Kothamangalam">Kothamangalam</option>
-      <option value="Muvattupuzha">Muvattupuzha</option>
-      <option value="Aluva">Aluva</option>
-      <option value="Thodupuzha">Thodupuzha</option>
-      <option value="Kochi">Kochi (Fort Kochi)</option>
+      <option value="Kottayam">Kottayam</option>
+      <option value="Thammanimattom">Thammanimattom</option>
+      <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+      <option value="Thiruvaniyoor">Thiruvaniyoor</option>
       <option value="Angamaly">Angamaly</option>
       <option value="Thrissur">Thrissur</option>
       <option value="Munnar">Munnar</option>
@@ -744,10 +744,6 @@
   <div class="stat-chip">
     <div class="stat-num" id="statRoutes">6</div>
     <div class="stat-lbl">Routes</div>
-  </div>
-  <div class="stat-chip">
-    <div class="stat-num">5:00</div>
-    <div class="stat-lbl">First Bus</div>
   </div>
 </div>
 
@@ -816,7 +812,19 @@ const BUS_DATA = [
     type: "fast-passenger",
     destination: "Kothamangalam",
     from: "Kolenchery",
-    via: "Muvattupuzha,Kothamangalam,Adimaly,Munnar,Marayoor",
+    via: "Muvattupuzha, Kothamangalam, Adimaly, Munnar, Marayoor, Udumelpettai",
+    platform: "Kolenchery College Bus Stop",
+    color: "#3b82f6",
+    timings: ["06:10"]
+  },
+  {
+    id: 17,
+    number: "KSRTC",
+    name: "Ernakulam - Udumelpettai",
+    type: "fast-passenger",
+    destination: "Munnar",
+    from: "Kolenchery",
+    via: "Muvattupuzha, Kothamangalam, Adimaly, Munnar, Marayoor, Udumelpettai",
     platform: "Kolenchery College Bus Stop",
     color: "#3b82f6",
     timings: ["06:10"]
@@ -828,7 +836,7 @@ const BUS_DATA = [
     type: "ordinary",
     destination: "Kothamangalam",
     from: "Kolenchery",
-    via: "Pattimattom,Perumbavoor,Kothamangalam",
+    via: "Pattimattom, Vengola, Perumbavoor, Kuruppumpady, Nellikkuzhi, Kothamangalam",
     platform: "Kolenchery College Bus Stop ",
     color: "#f5a623",
     timings: ["06:45"]
@@ -840,43 +848,67 @@ const BUS_DATA = [
     type: "Limited-stop",
     destination: "Thammanimattom",
     from: "Kolenchery",
-    via: "Kottor, Parekattil Kavala",
+    via: "Kottor, Parekattil Kavala, Ramamangalam, Piravom, Peruva, Ettumanoor, Kottayam",
     platform: "4",
     color: "#3b82f6",
     timings: ["07:25"]
   },
   {
-    id: 5,
-    number: "KL-05-E 520",
-    name: "Perumpavoor — Thodupuzha Super",
-    type: "superfast",
-    destination: "Thodupuzha",
-    from: "Perumpavoor",
-    via: "Kothamangalam",
-    platform: "5",
-    color: "#ef4444",
-    timings: ["06:30","08:30","10:30","12:30","14:30","16:30","18:30"]
+    id: 4,
+    number: "KSRTC",
+    name: "Kolenchery - Kottayam",
+    type: "Limited-stop",
+    destination: "Kottayam",
+    from: "Kolenchery",
+    via: "Parekattil Kavala, Thammanimattom, Ramamangalam, Piravom, Peruva, Ettumanoor, Kottayam",
+    platform: "4",
+    color: "#3b82f6",
+    timings: ["07:25"]
+  },
+  {
+    id: 14,
+    number: "KSRTC",
+    name: "Kolenchery - Thiruvananthapuram",
+    type: "Fast-Passenger",
+    destination: "Kottayam",
+    from: "Kolenchery",
+    via: "Peruvamuzhi, Ooramana, Ramamangalam, Piravom, Peruva, Kaduthuruthy, Ettumanoor, Kottayam, Chenganassery, Thiruvalla, Chengannoor, Panthalam, Adoor, Kottarakkara, Chadayamangalam, Kilimanoor, Venjaramoodu, Thiruvananthapuram",
+    platform: "4",
+    color: "#3b82f6",
+    timings: ["06:30"]
+  },
+  {
+    id: 16,
+    number: "KSRTC",
+    name: "Kolenchery - Thiruvananthapuram",
+    type: "Fast-Passenger",
+    destination: "Thiruvananthapuram",
+    from: "Kolenchery",
+    via: "Peruvamuzhi, Ooramana, Ramamangalam, Piravom, Peruva, Kaduthuruthy, Ettumanoor, Kottayam, Chenganassery, Thiruvalla, Chengannoor, Panthalam, Adoor, Kottarakkara, Chadayamangalam, Kilimanoor, Venjaramoodu, Thiruvananthapuram",
+    platform: "4",
+    color: "#3b82f6",
+    timings: ["06:30"]
   },
   {
     id: 6,
-    number: "KL-40-F 630",
-    name: "Perumpavoor — Kochi City",
-    type: "express",
-    destination: "Kochi",
-    from: "Perumpavoor",
-    via: "Muvattupuzha, Tripunithura, MG Road",
+    number: "GOODWILL",
+    name: "kolenchery - Kottayam",
+    type: "ordinary",
+    destination: "Kottayam",
+    from: "Kolenchery",
+    via: "Choondy, Ezhakkaranad ,Maneed ,Piravom ,Kaduthuruthy ,Ettumanoor,Kottayam",
     platform: "3",
     color: "#f5a623",
-    timings: ["05:15","06:45","08:15","09:45","11:15","12:45","14:15","15:45","17:15","18:45","20:15"]
+    timings: ["06:45","13:45"]
   },
   {
     id: 7,
-    number: "KL-07-G 711",
-    name: "Perumpavoor — Angamaly",
+    number: "KSRTC",
+    name: "Vyttila - Kolenchery - Piravom",
     type: "ordinary",
-    destination: "Angamaly",
-    from: "Perumpavoor",
-    via: "Aluva",
+    destination: "Thammanimattom",
+    from: "Kolenchery",
+    via: "Parekkatil Kavala, Thammanimattom, Ramamangalam, Mammalassery, Kakkad, Piravom",
     platform: "6",
     color: "#3b82f6",
     timings: ["07:00","09:00","11:00","13:00","15:00","17:00","19:00"]
