@@ -719,6 +719,9 @@
       <option value="Angamaly">Angamaly</option>
       <option value="Thrissur">Thrissur</option>
       <option value="Munnar">Munnar</option>
+      <option value="Chottanikkara">Chottanikkara</option>
+      <option value="Mulanthuruthy">Mulanthuruthy</option>
+      <option value="Piravom">Piravom</option>
     </select>
     <span class="arrow-icon">▼</span>
   </div>
@@ -921,7 +924,7 @@ const BUS_DATA = [
     platform: "6",
     image: "ksrtcthm.jpg",
     color: "#3b82f6",
-    timings: ["07:00","09:00","11:00","13:00","15:00","17:00","19:00"]
+    timings: ["17:40"]
   },
   {
     id: 8,
@@ -934,7 +937,7 @@ const BUS_DATA = [
     platform: "Kolenchery College Bus Stop",
     color: "#ef4444",
     image: "threekings.jpg",
-    timings: ["09:45","2:00"]
+    timings: ["09:45","14:00"]
   },
   {
     id: 18,
@@ -947,7 +950,7 @@ const BUS_DATA = [
     platform: "Kolenchery College Bus Stop",
     color: "#ef4444",
     image: "st.george.jpg",
-    timings: ["07:40","3:45"]
+    timings: ["07:40","15:45"]
   },
   {
     id: 19,
@@ -960,43 +963,189 @@ const BUS_DATA = [
     platform: "Kolenchery College Bus Stop",
     color: "#ef4444",
     image: "yathra.jpg",
-    timings: ["08:10","4:45"]
+    timings: ["08:10","16:45"]
   },
   {
     id: 9,
     number: "SMS",
     name: "Kolenchery - Kaloor",
     type: "ordinary",
-    destination: "Munnar",
-    from: "Perumpavoor",
-    via: "Kothamangalam, Adimali",
-    platform: "2",
+    destination: "Thiruvaniyoor",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Mulanthuruthy, Chottanikkara, Puthiyakaavu, Thrippunithura, Vyttila, Kadavanthra, Kaloor",
+    platform: "Kolenchery College Bus Stop",
     color: "#ef4444",
-    timings: ["06:00","08:00","10:00","14:00","17:00"]
+    timings: ["07:15"]
   },
   {
     id: 10,
-    number: "KL-40-J 014",
-    name: "Perumpavoor City Mini",
-    type: "minibus",
-    destination: "Ernakulam",
-    from: "Perumpavoor",
-    via: "Piravom, Trippunithura",
-    platform: "8",
+    number: "BLESSING",
+    name: "Kolenchery - Thrippunithura",
+    type: "ordinary",
+    destination: "Thiruvaniyoor",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Thalacode, Chottanikkara, Puthiyakaavu, Thrippunithura",
+    platform: "Kolenchery College Bus stop",
     color: "#22c55e",
-    timings: ["06:30","08:00","10:00","12:00","14:00","16:00","18:00","20:00"]
+    image:"blessing.jpg",
+    timings: ["17:00",]
   },
   {
-    id: 11,
-    number: "KL-40-K 121",
-    name: "Ernakulam — Kothamangalam Via",
+     id: 8,
+    number: "THREE KINGS",
+    name: "Perumbavoor - Chottanikkara",
     type: "ordinary",
-    destination: "Kothamangalam",
-    from: "Perumpavoor",
-    via: "Kalloorkad, Keerampara",
-    platform: "1",
+    destination: "Chottanikkara",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "threekings.jpg",
+    timings: ["09:45","14:00"]
+  },
+  {
+     id: 8,
+    number: "THREE KINGS",
+    name: "Perumbavoor - Mulanthuruthy",
+    type: "ordinary",
+    destination: "Mulanthuruthy",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara, Mulanthuruthy",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "threekings.jpg",
+    timings: ["09:45"]
+  },
+  {
+    id: 18,
+    number: "ST.GEORGE",
+    name: "Perumbavoor - Chottanikkara",
+    type: "ordinary",
+    destination: "Chottanikkara",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "st.george.jpg",
+    timings: ["07:40","15:45"]
+  },
+  {
+    id: 19,
+    number: "YATHRA",
+    name: "Mekkappala - Perumbavoor - Chottanikkara",
+    type: "ordinary",
+    destination: "Chottanikkara",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, Vandipetta, Sasthamughal, Thiruvankulam, Chottanikkara",
+    platform: "Kolenchery College Bus Stop",
+    color: "#ef4444",
+    image: "yathra.jpg",
+    timings: ["08:10","16:45"]
+  },
+  {
+    id: 9,
+    number: "SMS",
+    name: "Kolenchery - Kaloor",
+    type: "ordinary",
+    destination: "Chottanikkara",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Mulanthuruthy, Chottanikkara, Puthiyakaavu, Thrippunithura, Vyttila, Kadavanthra, Kaloor",
+    platform: "Kolenchery College Bus Stop",
+    image: "sms.jpeg",
+    color: "#ef4444",
+    timings: ["07:15"]
+  },
+  {
+    id: 9,
+    number: "SMS",
+    name: "Kolenchery - Kaloor",
+    type: "ordinary",
+    destination: "Mulanthuruthy",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Mulanthuruthy, Chottanikkara, Puthiyakaavu, Thrippunithura, Vyttila, Kadavanthra, Kaloor",
+    platform: "Kolenchery College Bus Stop",
+    image: "sms.jpeg",
+    color: "#ef4444",
+    timings: ["07:15"]
+  },
+   {
+    id: 9,
+    number: "KASTHOORI",
+    name: "Kothamanagalam - Thalayolaparamabu",
+    type: "ordinary",
+    destination: "Mulanthuruthy",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Mulanthuruthy, Amballoor, Kanjiramattom, Arayankaavu, ",
+    platform: "Kolenchery College Bus Stop",
+    image: "sms.jpeg",
+    color: "#ef4444",
+    timings: ["07:15"]
+  },
+  {
+    id: 10,
+    number: "BLESSING",
+    name: "Kolenchery - Thrippunithura",
+    type: "ordinary",
+    destination: "Chottanikkara",
+    from: "Kolenchery",
+    via: "Choondy, Meempara, Thiruvaniyoor, OEN, Vettikkal, Thalacode, Chottanikkara, Puthiyakaavu, Thrippunithura",
+    platform: "Kolenchery College Bus stop",
+    color: "#22c55e",
+    image:"blessing.jpg",
+    timings: ["17:00",]
+  },
+  
+  {
+    id: 11,
+    number: "KSRTC",
+    name: "Piravom - Palakkad",
+    type: "fastpassenger",
+    destination: "Angamaly, Thrissur, Palakkad",
+    from: "Kolenchery",
+    via: "Pattimattom, Vengola, Perumbavoor, Kalady, Angamaly, Chalakudy, Thrissur, Kuthiran, Palakkad",
+    platform: "Kolenchery College Bus Stop",
     color: "#3b82f6",
-    timings: ["05:00","07:00","09:00","11:00","13:00","15:00","17:00","19:00","21:00"]
+    image:"ksrtcplkd.jpg",
+    timings: ["07:30"]
+  },
+  {
+    id: 21,
+    number: "THATCHAYIL",
+    name: "Kolenchery - Angamaly",
+    type: "ordinary",
+    destination: "Angamaly",
+    from: "Kolenchery",
+    via: "Pattimattom, Vengola, Perumbavoor, Vallom, Kalady, Angamaly",
+    platform: "Kolenchery Bus Stand",
+    color: "#3b82f6",
+    image:"thatchayil.jpeg",
+    timings: ["8:00","11:30","14:35"]
+  },
+  {
+    id: 21,
+    number: "ST.THOMAS",
+    name: "Kolenchery - Angamaly",
+    type: "ordinary",
+    destination: "Angamaly",
+    from: "Kolenchery",
+    via: "Pattimattom, Vengola, Perumbavoor, Vallom, Kalady, Angamaly",
+    platform: "Kolenchery Bus Stand",
+    color: "#3b82f6",
+    image:"ksrtcplkd.jpg",
+    timings: ["9:45","13:20","16:45"]
+  },
+  {
+    id: 21,
+    number: "THENGANAL",
+    name: "Pampakuda - Angamaly",
+    type: "ordinary",
+    destination: "Angamaly",
+    from: "Kolenchery",
+    via: "Pattimattom, Vengola, Perumbavoor, Vallom, Kalady, Angamaly",
+    platform: "Kolenchery Bus College Bus Stop",
+    color: "#3b82f6",
+    image:"thenganal.jpeg",
+    timings: ["8:20"]
   },
   {
     id: 12,
